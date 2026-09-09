@@ -60,13 +60,13 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-6 overflow-hidden"
     >
-      {/* 3D Interactive Neural Particle Matrix */}
-      <div className="absolute inset-0 z-0 opacity-90 pointer-events-none">
+      {/* 3D Interactive Doctor Strange Sling Ring Dimensional Portal */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <ThreeScene />
       </div>
 
-      {/* Atmospheric lighting gradients */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-purple-700/20 via-indigo-600/15 to-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Purple Portal Atmospheric Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, rgba(109,40,217,0.12) 35%, rgba(67,20,120,0.07) 65%, transparent 100%)", filter: "blur(80px)" }} />
 
       {/* Hero Content */}
       <div className="relative z-20 text-center max-w-5xl mx-auto flex flex-col items-center">
