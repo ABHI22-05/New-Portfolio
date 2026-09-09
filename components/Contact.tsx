@@ -1,191 +1,342 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { gsap } from "gsap"
+import {
+  Mail,
+  Phone,
+  Linkedin,
+  Github,
+  Code2,
+  Copy,
+  Check,
+  Send,
+  MapPin,
+  Sparkles,
+  ExternalLink,
+} from "lucide-react"
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    subject: "",
     message: "",
   })
+  const [submitted, setSubmitted] = useState(false)
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".contact-item",
-        { y: 50, opacity: 0 },
+        ".contact-element",
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.2,
+          stagger: 0.15,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
             end: "bottom 20%",
           },
-        },
+        }
       )
     }, sectionRef)
 
     return () => ctx.revert()
   }, [])
 
+  const copyToClipboard = (text: string, key: string) => {
+    navigator.clipboard.writeText(text)
+    setCopiedKey(key)
+    setTimeout(() => setCopiedKey(null), 2500)
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
+    setSubmitted(true)
+    setTimeout(() => {
+      setSubmitted(false)
+      setFormData({ name: "", email: "", subject: "", message: "" })
+    }, 4000)
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const contactInfo = [
+  const contactCards = [
     {
-      label: "Phone",
-      value: "+91 8458017680",
+      key: "email",
+      icon: Mail,
+      label: "Email Address",
+      value: "abhishekjavafs@gmail.com",
+      href: "mailto:abhishekjavafs@gmail.com",
+      copyable: true,
+    },
+    {
+      key: "phone",
+      icon: Phone,
+      label: "Phone Number",
+      value: "+91-8458017680",
       href: "tel:+918458017680",
-      icon: "📞",
+      copyable: true,
     },
     {
-      label: "Email",
-      value: "abhishekjena654@gmail.com",
-      href: "mailto:abhishekjena654@gmail.com",
-      icon: "✉️",
-    },
-    {
-      label: "LinkedIn",
+      key: "linkedin",
+      icon: Linkedin,
+      label: "LinkedIn Profile",
       value: "linkedin.com/in/05-abhi",
       href: "https://www.linkedin.com/in/05-abhi",
-      icon: "💼",
+      copyable: false,
+    },
+    {
+      key: "github",
+      icon: Github,
+      label: "GitHub Repositories",
+      value: "github.com/ABHI22-05",
+      href: "https://github.com/ABHI22-05",
+      copyable: false,
+    },
+    {
+      key: "leetcode",
+      icon: Code2,
+      label: "LeetCode Problem Solving",
+      value: "leetcode.com (DSA Profile)",
+      href: "https://leetcode.com",
+      copyable: false,
     },
   ]
 
   return (
-    <section id="contact" ref={sectionRef} className="relative py-20 px-6">
-      <div className="container mx-auto max-w-6xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent"
-        >
-          Get In Touch
-        </motion.h2>
+    <section id="contact" ref={sectionRef} className="relative py-24 px-6 overflow-hidden">
+      {/* Glow shapes */}
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-purple-700/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-700/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Contact Information */}
-          <div className="contact-item">
-            <h3 className="text-2xl font-semibold mb-8 text-white/90">Let's Connect</h3>
-            <p className="text-lg text-white/70 mb-8 leading-relaxed">
-              I'm always interested in new opportunities and exciting projects. Whether you have a question or just want
-              to say hi, feel free to reach out!
-            </p>
+      <div className="container mx-auto max-w-6xl relative z-10">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Get In Touch</span>
+          </motion.div>
 
-            <div className="space-y-6">
-              {contactInfo.map((info, index) => (
-                <motion.a
-                  key={info.label}
-                  href={info.href}
-                  target={info.href.startsWith("http") ? "_blank" : undefined}
-                  rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="flex items-center space-x-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 group"
-                  whileHover={{ scale: 1.02, x: 10 }}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <span className="text-2xl">{info.icon}</span>
-                  <div>
-                    <div className="text-sm text-white/60 uppercase tracking-wide">{info.label}</div>
-                    <div className="text-white/90 group-hover:text-blue-400 transition-colors">{info.value}</div>
-                  </div>
-                </motion.a>
-              ))}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
+          >
+            Let's Build Something Exceptional
+          </motion.h2>
+
+          <p className="text-lg text-slate-200 max-w-2xl mx-auto">
+            Open to senior engineering roles, microservices architecture discussions, and exciting full-stack opportunities.
+          </p>
+        </div>
+
+        {/* Two Column Grid */}
+        <div className="grid lg:grid-cols-12 gap-10">
+          {/* Left Column: Contact Cards */}
+          <div className="contact-element lg:col-span-5 space-y-4">
+            <div className="p-6 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/20 mb-6 shadow-xl">
+              <h3 className="font-heading text-xl font-bold text-white mb-2">Abhishek Jena</h3>
+              <p className="text-sm text-slate-200 mb-4 leading-relaxed font-normal">
+                AI-First Full Stack Developer specialized in autonomous AI agents, Spring Boot, React, Next.js, Kafka, Redis, and high-performance system architecture.
+              </p>
+              <div className="flex items-center gap-2 text-xs text-purple-300 font-medium">
+                <MapPin className="w-4 h-4 text-purple-400" />
+                <span>India • Available for Remote & Onsite Roles</span>
+              </div>
             </div>
+
+            {/* Direct Connect Buttons */}
+            {contactCards.map((card) => {
+              const Icon = card.icon
+              const isCopied = copiedKey === card.key
+
+              return (
+                <div
+                  key={card.key}
+                  className="p-4 rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/15 hover:border-purple-400/50 transition-all duration-300 flex items-center justify-between group shadow-md"
+                >
+                  <a
+                    href={card.href}
+                    target={card.href.startsWith("http") ? "_blank" : undefined}
+                    rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="flex items-center gap-3.5 flex-1 min-w-0"
+                  >
+                    <div className="p-2.5 rounded-lg bg-purple-950/60 border border-purple-500/30 text-purple-300 group-hover:text-white group-hover:bg-purple-600 transition-colors">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="truncate">
+                      <div className="text-[11px] font-semibold text-purple-300 uppercase tracking-wider">
+                        {card.label}
+                      </div>
+                      <div className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors truncate">
+                        {card.value}
+                      </div>
+                    </div>
+                  </a>
+
+                  {card.copyable ? (
+                    <button
+                      onClick={() => copyToClipboard(card.value, card.key)}
+                      className="p-2 ml-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-purple-300 hover:text-white border border-white/10 transition-all text-xs flex items-center gap-1 shrink-0"
+                      title="Copy to clipboard"
+                    >
+                      {isCopied ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-[11px] text-emerald-400 font-bold">Copied</span>
+                        </>
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  ) : (
+                    <a
+                      href={card.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 ml-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-purple-300 hover:text-white border border-white/10 transition-all shrink-0"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+              )
+            })}
           </div>
 
-          {/* Contact Form */}
-          <div className="contact-item">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-white/80 mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:border-blue-400 focus:outline-none transition-colors text-white placeholder-white/50"
-                  placeholder="Your Name"
-                />
-              </div>
+          {/* Right Column: Send a Message Form */}
+          <div className="contact-element lg:col-span-7 bg-slate-950/85 backdrop-blur-xl rounded-3xl border border-purple-500/30 p-8 md:p-10 shadow-2xl">
+            <h3 className="font-heading text-2xl font-bold text-white mb-2">Send a Message</h3>
+            <p className="text-sm text-slate-200 mb-8 font-normal">
+              Leave your details below and I will get back to you promptly.
+            </p>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white/80 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:border-blue-400 focus:outline-none transition-colors text-white placeholder-white/50"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-white/80 mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  className="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg focus:border-blue-400 focus:outline-none transition-colors text-white placeholder-white/50 resize-none"
-                  placeholder="Your message..."
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-8 rounded-2xl bg-purple-950/60 border border-purple-400/50 text-center space-y-3"
               >
-                Send Message
-              </motion.button>
-            </form>
+                <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/40 flex items-center justify-center mx-auto">
+                  <Check className="w-6 h-6" />
+                </div>
+                <h4 className="font-heading text-xl font-bold text-white">Message Sent Successfully!</h4>
+                <p className="text-sm text-slate-200">
+                  Thank you for reaching out. I will respond to your email shortly.
+                </p>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider mb-2">
+                      Your Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="e.g. John Doe"
+                      className="w-full px-4 py-3 text-sm bg-slate-900 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-purple-400 transition-colors shadow-inner"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider mb-2">
+                      Your Email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="john@example.com"
+                      className="w-full px-4 py-3 text-sm bg-slate-900 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-purple-400 transition-colors shadow-inner"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider mb-2">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    placeholder="Full-Stack Opportunity / Project Collaboration"
+                    className="w-full px-4 py-3 text-sm bg-slate-900 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-purple-400 transition-colors shadow-inner"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Tell me about your team, system requirements, or project scope..."
+                    className="w-full px-4 py-3 text-sm bg-slate-900 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-purple-400 transition-colors resize-none shadow-inner"
+                  />
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-purple-600/30 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Send Message</span>
+                </motion.button>
+              </form>
+            )}
           </div>
         </div>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="contact-item mt-16 pt-8 border-t border-white/10 text-center"
-        >
-          <p className="text-white/60">© 2024 Abhishek Jena. Built with Next.js, Three.js, Framer Motion & GSAP.</p>
-        </motion.div>
+        {/* Footer Bar */}
+        <div className="contact-element mt-20 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-300">
+          <div>
+            © {new Date().getFullYear()} Abhishek Jena. All rights reserved.
+          </div>
+          <div className="flex items-center gap-4 font-medium">
+            <a
+              href="https://github.com/ABHI22-05"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              GitHub: ABHI22-05
+            </a>
+            <span>•</span>
+            <a
+              href="https://www.linkedin.com/in/05-abhi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              LinkedIn
+            </a>
+            <span>•</span>
+            <span>Built with Next.js, Framer Motion & Tailwind</span>
+          </div>
+        </div>
       </div>
     </section>
   )

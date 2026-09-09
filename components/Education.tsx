@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { gsap } from "gsap"
+import { GraduationCap, Award, BookOpen, Calendar, MapPin, CheckCircle2 } from "lucide-react"
 
 export default function Education() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -10,100 +11,128 @@ export default function Education() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".education-item",
-        { x: -50, opacity: 0 },
+        ".edu-card",
+        { y: 40, opacity: 0 },
         {
-          x: 0,
+          y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.2,
+          stagger: 0.15,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
             end: "bottom 20%",
           },
-        },
+        }
       )
     }, sectionRef)
 
     return () => ctx.revert()
   }, [])
 
-  const education = [
-    {
-      degree: "Master in Computer Application (MCA)",
-      institution: "Lovely Professional University",
-      period: "2022-2024",
-      description:
-        "Comprehensive program covering advanced computer science concepts, software development, and system design.",
-      color: "from-purple-500 to-pink-500",
-    },
-    {
-      degree: "Bachelor of Science in Chemistry",
-      institution: "Jagannath Jew Mahavidyalaya",
-      period: "2017-2020",
-      description: "Strong foundation in analytical thinking and problem-solving methodologies.",
-      color: "from-blue-500 to-cyan-500",
-    },
-    {
-      degree: "Higher Secondary Education",
-      institution: "Pingua Degree College",
-      period: "2015-2017",
-      description: "Council of Higher Secondary Education certification with focus on science subjects.",
-      color: "from-green-500 to-emerald-500",
-    },
-  ]
-
   return (
-    <section id="education" ref={sectionRef} className="relative py-20 px-6">
+    <section id="education" ref={sectionRef} className="relative py-24 px-6">
       <div className="container mx-auto max-w-4xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent"
-        >
-          Education
-        </motion.h2>
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
+          >
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>Academic Background</span>
+          </motion.div>
 
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 via-purple-500 to-pink-500"></div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
+          >
+            Education & Foundation
+          </motion.h2>
 
-          <div className="space-y-12">
-            {education.map((edu, index) => (
-              <motion.div
-                key={edu.degree}
-                className="education-item relative flex items-start space-x-8"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Timeline dot */}
-                <div
-                  className={`relative z-10 w-4 h-4 bg-gradient-to-r ${edu.color} rounded-full border-4 border-black flex-shrink-0 mt-6`}
-                >
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-r ${edu.color} rounded-full animate-ping opacity-20`}
-                  ></div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                    <h3 className={`text-xl font-bold bg-gradient-to-r ${edu.color} bg-clip-text text-transparent`}>
-                      {edu.degree}
-                    </h3>
-                    <span className="text-white/60 text-sm font-medium mt-1 md:mt-0">{edu.period}</span>
-                  </div>
-
-                  <h4 className="text-lg font-semibold text-white/90 mb-3">{edu.institution}</h4>
-
-                  <p className="text-white/70 leading-relaxed">{edu.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <p className="text-lg text-slate-200 max-w-xl mx-auto">
+            Formal postgraduate education in computer science, software engineering, and distributed computation.
+          </p>
         </div>
+
+        {/* Education Highlight Card */}
+        <motion.div
+          whileHover={{ y: -4 }}
+          className="edu-card relative bg-slate-950/85 backdrop-blur-xl rounded-3xl border border-purple-500/40 p-8 md:p-10 shadow-2xl overflow-hidden"
+        >
+          {/* Subtle background glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10">
+            {/* Top row: Degree & Date */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-6 border-b border-white/10">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-3 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300 text-xs font-bold">
+                    Postgraduate Degree
+                  </span>
+                  <span className="px-3 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-bold">
+                    CGPA: 7.5 / 10
+                  </span>
+                </div>
+                <h3 className="font-heading text-2xl md:text-3xl font-extrabold text-white">
+                  Master of Computer Applications (MCA)
+                </h3>
+              </div>
+
+              <div className="flex flex-col sm:items-end text-slate-200 text-xs sm:text-sm font-medium">
+                <span className="flex items-center gap-1.5 text-purple-300 font-semibold">
+                  <Calendar className="w-4 h-4" />
+                  2022 – 2024
+                </span>
+                <span className="flex items-center gap-1.5 mt-0.5">
+                  <MapPin className="w-3.5 h-3.5" />
+                  Punjab, India
+                </span>
+              </div>
+            </div>
+
+            {/* Institution */}
+            <div className="py-6">
+              <h4 className="font-heading text-xl font-bold text-white mb-2">
+                Lovely Professional University
+              </h4>
+              <p className="text-sm text-slate-200 leading-relaxed max-w-2xl font-normal">
+                Rigorous curriculum emphasizing core software engineering, object-oriented programming (OOP), enterprise architecture, and algorithmic design principles.
+              </p>
+            </div>
+
+            {/* Coursework & Competencies */}
+            <div className="pt-4 border-t border-white/10">
+              <h5 className="font-heading text-xs font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-purple-400" />
+                <span>Specialized Coursework & Academic Focus</span>
+              </h5>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  "Data Structures & Algorithms (DSA)",
+                  "Java Full Stack Development",
+                  "Object-Oriented Programming (OOP) & SOLID Principles",
+                  "Low-Level (LLD) & High-Level (HLD) System Design",
+                  "Database Management & Query Optimization (SQL)",
+                  "Operating Systems, Multithreading & Concurrency",
+                ].map((course, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/80 border border-white/10 text-xs text-slate-100 font-medium hover:border-purple-400/40 transition-all shadow-sm"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
+                    <span>{course}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   )

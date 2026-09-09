@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Hero from "@/components/Hero"
 import About from "@/components/About"
 import Skills from "@/components/Skills"
+import Experience from "@/components/Experience"
 import Projects from "@/components/Projects"
 import Education from "@/components/Education"
 import Contact from "@/components/Contact"
@@ -28,13 +29,14 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="relative min-h-screen bg-black text-white overflow-x-hidden cursor-none">
+    <main className="relative min-h-screen bg-black text-white overflow-x-hidden">
       <CustomCursor />
       <GridBackground />
       <Navigation />
       <Hero />
       <About />
       <Skills />
+      <Experience />
       <Projects />
       <Education />
       <Contact />

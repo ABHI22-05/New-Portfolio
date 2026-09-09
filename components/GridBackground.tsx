@@ -13,125 +13,96 @@ export default function GridBackground() {
     if (!ctx) return
 
     let animationId: number
+    let width = (canvas.width = window.innerWidth)
+    let height = (canvas.height = window.innerHeight)
+
+    // Stardust particles
+    const particleCount = 45
+    const particles = Array.from({ length: particleCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 1.6 + 0.4,
+      speedX: (Math.random() - 0.5) * 0.25,
+      speedY: -Math.random() * 0.35 - 0.05,
+      alpha: Math.random() * 0.6 + 0.2,
+      pulseSpeed: Math.random() * 0.02 + 0.005,
+      pulseOffset: Math.random() * Math.PI * 2,
+    }))
+
     let time = 0
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
+    const render = () => {
+      time += 0.015
+      ctx.clearRect(0, 0, width, height)
 
-    const drawAnimatedGrid = () => {
-      const gridSize = 80
+      // 1. Sleek Cyber Grid with Distance Fade
+      const gridSize = 72
+      const gridOpacity = 0.045
 
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.strokeStyle = `rgba(168, 85, 247, ${gridOpacity})`
+      ctx.lineWidth = 1
 
-      // Draw vertical lines with wave animation
-      for (let x = 0; x <= canvas.width; x += gridSize) {
-        const waveOffset = Math.sin(time + x * 0.01) * 20
-        const opacity = 0.15 + Math.sin(time * 0.5 + x * 0.005) * 0.1
-
-        ctx.strokeStyle = `rgba(147, 51, 234, ${opacity})`
-        ctx.lineWidth = 1
-
+      // Subtle vertical grid lines
+      for (let x = 0; x <= width; x += gridSize) {
         ctx.beginPath()
         ctx.moveTo(x, 0)
-
-        // Create wavy lines
-        for (let y = 0; y <= canvas.height; y += 20) {
-          const wave = Math.sin(time * 2 + y * 0.01 + x * 0.005) * waveOffset * 0.3
-          ctx.lineTo(x + wave, y)
-        }
+        ctx.lineTo(x, height)
         ctx.stroke()
       }
 
-      // Draw horizontal lines with wave animation
-      for (let y = 0; y <= canvas.height; y += gridSize) {
-        const waveOffset = Math.cos(time + y * 0.01) * 20
-        const opacity = 0.15 + Math.cos(time * 0.5 + y * 0.005) * 0.1
-
-        ctx.strokeStyle = `rgba(147, 51, 234, ${opacity})`
-        ctx.lineWidth = 1
-
+      // Subtle horizontal grid lines
+      for (let y = 0; y <= height; y += gridSize) {
         ctx.beginPath()
         ctx.moveTo(0, y)
-
-        // Create wavy lines
-        for (let x = 0; x <= canvas.width; x += 20) {
-          const wave = Math.cos(time * 2 + x * 0.01 + y * 0.005) * waveOffset * 0.3
-          ctx.lineTo(x, y + wave)
-        }
+        ctx.lineTo(width, y)
         ctx.stroke()
       }
 
-      // Add animated intersection points
-      for (let x = 0; x <= canvas.width; x += gridSize) {
-        for (let y = 0; y <= canvas.height; y += gridSize) {
-          const distance = Math.sqrt((x - canvas.width / 2) ** 2 + (y - canvas.height / 2) ** 2)
-          const pulse = Math.sin(time * 3 - distance * 0.01) * 0.5 + 0.5
-          const opacity = 0.3 + pulse * 0.4
-          const size = 2 + pulse * 2
-
-          // Main dot
-          ctx.fillStyle = `rgba(168, 85, 247, ${opacity})`
-          ctx.beginPath()
-          ctx.arc(x, y, size, 0, Math.PI * 2)
-          ctx.fill()
-
-          // Glow effect
-          if (pulse > 0.7) {
-            ctx.fillStyle = `rgba(196, 181, 253, ${(pulse - 0.7) * 0.5})`
+      // 2. Micro-Glowing Grid Intersections
+      for (let x = 0; x <= width; x += gridSize * 2) {
+        for (let y = 0; y <= height; y += gridSize * 2) {
+          const pulse = Math.sin(time + x * 0.01 + y * 0.01) * 0.5 + 0.5
+          if (pulse > 0.4) {
+            ctx.fillStyle = `rgba(192, 132, 252, ${pulse * 0.15})`
             ctx.beginPath()
-            ctx.arc(x, y, size * 2, 0, Math.PI * 2)
+            ctx.arc(x, y, 1.5, 0, Math.PI * 2)
             ctx.fill()
           }
         }
       }
 
-      // Add flowing particles
-      const particleCount = 5
-      for (let i = 0; i < particleCount; i++) {
-        const x = ((time * 50 + i * 200) % (canvas.width + 100)) - 50
-        const y = canvas.height * 0.2 + Math.sin(time + i) * canvas.height * 0.6
-        const opacity = 0.6 + Math.sin(time * 2 + i) * 0.3
-        const size = 3 + Math.sin(time * 3 + i) * 2
+      // 3. Ambient Stardust Particles
+      particles.forEach((p) => {
+        p.x += p.speedX
+        p.y += p.speedY
 
-        // Particle trail
-        ctx.strokeStyle = `rgba(147, 51, 234, ${opacity * 0.3})`
-        ctx.lineWidth = 2
-        ctx.beginPath()
-        ctx.moveTo(x - 30, y)
-        ctx.lineTo(x, y)
-        ctx.stroke()
+        // Wrap around screen
+        if (p.y < 0) {
+          p.y = height
+          p.x = Math.random() * width
+        }
+        if (p.x < 0) p.x = width
+        if (p.x > width) p.x = 0
 
-        // Main particle
-        ctx.fillStyle = `rgba(168, 85, 247, ${opacity})`
+        const pulse = Math.sin(time * 2 + p.pulseOffset) * 0.3 + 0.7
+        const currentAlpha = p.alpha * pulse
+
+        ctx.fillStyle = `rgba(196, 181, 253, ${currentAlpha})`
         ctx.beginPath()
-        ctx.arc(x, y, size, 0, Math.PI * 2)
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
         ctx.fill()
+      })
 
-        // Particle glow
-        ctx.fillStyle = `rgba(196, 181, 253, ${opacity * 0.5})`
-        ctx.beginPath()
-        ctx.arc(x, y, size * 1.5, 0, Math.PI * 2)
-        ctx.fill()
-      }
+      animationId = requestAnimationFrame(render)
     }
-
-    const animate = () => {
-      time += 0.02
-      drawAnimatedGrid()
-      animationId = requestAnimationFrame(animate)
-    }
-
-    resizeCanvas()
-    animate()
 
     const handleResize = () => {
-      resizeCanvas()
+      width = canvas.width = window.innerWidth
+      height = canvas.height = window.innerHeight
     }
 
     window.addEventListener("resize", handleResize)
+    render()
 
     return () => {
       window.removeEventListener("resize", handleResize)
@@ -140,13 +111,25 @@ export default function GridBackground() {
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0"
-      style={{
-        background:
-          "radial-gradient(ellipse at center, rgba(30, 27, 75, 0.8) 0%, rgba(15, 15, 35, 0.95) 50%, rgba(0, 0, 0, 1) 100%)",
-      }}
-    />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Dynamic ambient radial gradients */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(88, 28, 135, 0.22) 0%, rgba(15, 10, 30, 0.6) 45%, rgba(4, 4, 10, 0.98) 100%)",
+        }}
+      />
+      {/* Gentle bottom glow */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-[400px]"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(67, 56, 202, 0.12) 0%, transparent 80%)",
+        }}
+      />
+      {/* Animated canvas layer */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+    </div>
   )
 }
