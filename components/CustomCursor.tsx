@@ -141,7 +141,12 @@ export default function CustomCursor() {
         else if (tagName === "input" || tagName === "textarea") setTargetType("INPUT")
         else setTargetType("TARGET")
       } else {
-        setTargetType(null)
+        const isText = target?.closest("p, h1, h2, h3, h4, h5, h6, span, code, pre, li")
+        if (isText && window.getSelection()?.type !== "Range") {
+          setTargetType("TEXT")
+        } else {
+          setTargetType(null)
+        }
       }
     }
 
@@ -167,6 +172,7 @@ export default function CustomCursor() {
   if (!isVisible) return null
 
   const isHovering = !!targetType
+  const isTextOrInput = targetType === "TEXT" || targetType === "INPUT"
 
   return (
     <>
@@ -177,14 +183,14 @@ export default function CustomCursor() {
         aria-hidden="true"
       />
 
-      {/* Cyber Reticle / Corner brackets */}
+      {/* Cyber Reticle & Blinking I-Beam Frame */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999]"
         animate={{
-          x: mousePos.x - (isHovering ? 20 : 14),
-          y: mousePos.y - (isHovering ? 20 : 14),
-          scale: isClicking ? 0.85 : isHovering ? 1.25 : 1,
-          rotate: isHovering ? 45 : 0,
+          x: mousePos.x - (isHovering && !isTextOrInput ? 20 : 14),
+          y: mousePos.y - (isHovering && !isTextOrInput ? 20 : 14),
+          scale: isClicking ? 0.85 : isHovering && !isTextOrInput ? 1.25 : 1,
+          rotate: isHovering && !isTextOrInput ? 45 : 0,
         }}
         transition={{
           type: "spring",
@@ -195,46 +201,91 @@ export default function CustomCursor() {
       >
         <div
           className={`relative transition-all duration-150 ${
-            isHovering ? "w-10 h-10" : "w-7 h-7"
+            isHovering && !isTextOrInput ? "w-10 h-10" : "w-7 h-7"
           }`}
         >
-          {/* Top-Left Corner */}
+          {/* Top-Left Corner Bracket */}
           <span
-            className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 transition-colors duration-150 ${
-              isHovering ? "border-cyan-400 shadow-[0_0_8px_#22d3ee]" : "border-purple-400/80"
+            className={`absolute top-0 left-0 transition-all duration-150 ${
+              isTextOrInput
+                ? "w-1.5 h-1 border-t border-l border-cyan-400/70"
+                : isHovering
+                ? "w-2 h-2 border-t-2 border-l-2 border-cyan-400 shadow-[0_0_8px_#22d3ee]"
+                : "w-1.5 h-1.5 border-t-2 border-l-2 border-purple-400/80"
             }`}
           />
-          {/* Top-Right Corner */}
+          {/* Top-Right Corner Bracket */}
           <span
-            className={`absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 transition-colors duration-150 ${
-              isHovering ? "border-cyan-400 shadow-[0_0_8px_#22d3ee]" : "border-purple-400/80"
+            className={`absolute top-0 right-0 transition-all duration-150 ${
+              isTextOrInput
+                ? "w-1.5 h-1 border-t border-r border-cyan-400/70"
+                : isHovering
+                ? "w-2 h-2 border-t-2 border-r-2 border-cyan-400 shadow-[0_0_8px_#22d3ee]"
+                : "w-1.5 h-1.5 border-t-2 border-r-2 border-purple-400/80"
             }`}
           />
-          {/* Bottom-Left Corner */}
+          {/* Bottom-Left Corner Bracket */}
           <span
-            className={`absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 transition-colors duration-150 ${
-              isHovering ? "border-cyan-400 shadow-[0_0_8px_#22d3ee]" : "border-purple-400/80"
+            className={`absolute bottom-0 left-0 transition-all duration-150 ${
+              isTextOrInput
+                ? "w-1.5 h-1 border-b border-l border-cyan-400/70"
+                : isHovering
+                ? "w-2 h-2 border-b-2 border-l-2 border-cyan-400 shadow-[0_0_8px_#22d3ee]"
+                : "w-1.5 h-1.5 border-b-2 border-l-2 border-purple-400/80"
             }`}
           />
-          {/* Bottom-Right Corner */}
+          {/* Bottom-Right Corner Bracket */}
           <span
-            className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 transition-colors duration-150 ${
-              isHovering ? "border-cyan-400 shadow-[0_0_8px_#22d3ee]" : "border-purple-400/80"
+            className={`absolute bottom-0 right-0 transition-all duration-150 ${
+              isTextOrInput
+                ? "w-1.5 h-1 border-b border-r border-cyan-400/70"
+                : isHovering
+                ? "w-2 h-2 border-b-2 border-r-2 border-cyan-400 shadow-[0_0_8px_#22d3ee]"
+                : "w-1.5 h-1.5 border-b-2 border-r-2 border-purple-400/80"
             }`}
           />
 
-          {/* Central Target Crosshair dot */}
+          {/* Central Blinking I-Beam (Text cursor caret) */}
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-150 ${
-              isHovering
-                ? "w-2 h-2 bg-cyan-400 shadow-[0_0_10px_#22d3ee]"
-                : "w-1.5 h-1.5 bg-purple-300/90"
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center transition-all duration-150 ${
+              isHovering ? "animate-terminal-blink-fast" : "animate-terminal-blink"
             }`}
-          />
+          >
+            {/* Top Serif Cap of I-Beam */}
+            <span
+              className={`block rounded-full transition-all duration-150 ${
+                isTextOrInput
+                  ? "w-3 h-[1.5px] bg-cyan-300 shadow-[0_0_8px_#22d3ee]"
+                  : isHovering
+                  ? "w-2.5 h-[1.5px] bg-cyan-300 shadow-[0_0_6px_#22d3ee]"
+                  : "w-2 h-[1.5px] bg-purple-300 shadow-[0_0_4px_#c084fc]"
+              }`}
+            />
+            {/* Vertical Stem of I-Beam */}
+            <span
+              className={`block transition-all duration-150 ${
+                isTextOrInput
+                  ? "w-[2px] h-4 bg-cyan-300 shadow-[0_0_10px_#22d3ee]"
+                  : isHovering
+                  ? "w-[1.5px] h-3.5 bg-cyan-300 shadow-[0_0_8px_#22d3ee]"
+                  : "w-[1.5px] h-3 bg-purple-300 shadow-[0_0_5px_#c084fc]"
+              }`}
+            />
+            {/* Bottom Serif Cap of I-Beam */}
+            <span
+              className={`block rounded-full transition-all duration-150 ${
+                isTextOrInput
+                  ? "w-3 h-[1.5px] bg-cyan-300 shadow-[0_0_8px_#22d3ee]"
+                  : isHovering
+                  ? "w-2.5 h-[1.5px] bg-cyan-300 shadow-[0_0_6px_#22d3ee]"
+                  : "w-2 h-[1.5px] bg-purple-300 shadow-[0_0_4px_#c084fc]"
+              }`}
+            />
+          </div>
         </div>
       </motion.div>
 
-      {/* Futuristic Telemetry HUD & Coordinate Badge */}
+      {/* Futuristic Telemetry HUD & Coordinate Badge with Blinking Prompt */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9998]"
         animate={{
@@ -248,7 +299,7 @@ export default function CustomCursor() {
           mass: 0.1,
         }}
       >
-        <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-black/75 border border-purple-500/30 backdrop-blur-sm text-[9px] font-mono leading-tight tracking-wider select-none">
+        <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-black/80 border border-purple-500/30 backdrop-blur-sm text-[9px] font-mono leading-tight tracking-wider select-none">
           <span
             className={`w-1.5 h-1.5 rounded-full ${
               isHovering
@@ -258,11 +309,12 @@ export default function CustomCursor() {
           />
           {isHovering ? (
             <span className="text-cyan-300 font-bold tracking-widest uppercase">
-              [{targetType}]
+              [{targetType}]<span className="animate-terminal-blink-fast text-cyan-400">|</span>
             </span>
           ) : (
-            <span className="text-purple-300/70">
+            <span className="text-purple-300/70 flex items-center">
               X:{String(Math.max(0, mousePos.x)).padStart(4, "0")} Y:{String(Math.max(0, mousePos.y)).padStart(4, "0")}
+              <span className="ml-1 animate-terminal-blink text-purple-400">_</span>
             </span>
           )}
         </div>
