@@ -1,0 +1,13 @@
+{
+  "name": "Abhishek Jena — Portfolio",
+  "short_name": "Abhishek Jena",
+  "description": "AI-First Full Stack Developer & Co-Founder — Spring Boot, React, Next.js, AI Agents",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#0a0a0f",
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

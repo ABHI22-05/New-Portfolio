@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { motion } from "framer-motion"
 import { gsap } from "gsap"
 import {
   Server,
@@ -23,16 +22,17 @@ export default function About() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".about-item",
-        { y: 50, opacity: 0 },
+        { y: 28, opacity: 0, filter: "blur(3px)" },
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.15,
+          filter: "blur(0px)",
+          duration: 0.75,
+          stagger: 0.1,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top 78%",
           },
         }
       )
@@ -80,23 +80,14 @@ export default function About() {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="about-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
-          >
+          <div className="about-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Profile Overview</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="about-item font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
-          >
+          <h2 className="about-item font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
             About Abhishek Jena
-          </motion.h2>
+          </h2>
 
           <p className="about-item text-lg text-slate-200 max-w-2xl mx-auto">
             AI-First Full Stack Developer dedicated to building autonomous AI agent integrations, performant backend ecosystems, and mission-critical web applications.
@@ -139,10 +130,9 @@ export default function About() {
             {corePillars.map((pillar, index) => {
               const IconComponent = pillar.icon
               return (
-                <motion.div
+                <div
                   key={pillar.title}
-                  whileHover={{ scale: 1.02, x: 4 }}
-                  className={`p-5 rounded-xl bg-slate-950/80 border border-white/15 backdrop-blur-md transition-all duration-300 shadow-md`}
+                  className={`p-5 rounded-xl bg-slate-950/80 border border-white/15 backdrop-blur-md transition-all duration-300 shadow-md hover:border-purple-400/50 hover:-translate-y-0.5`}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-2 rounded-lg bg-purple-950/60 border border-purple-500/30 text-purple-300">
@@ -155,7 +145,7 @@ export default function About() {
                   <p className="text-xs text-slate-300 leading-relaxed font-normal">
                     {pillar.desc}
                   </p>
-                </motion.div>
+                </div>
               )
             })}
           </div>
@@ -164,17 +154,16 @@ export default function About() {
         {/* Quantified Metrics Showcase */}
         <div className="about-item grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
-            <motion.div
+            <div
               key={stat.label}
-              whileHover={{ scale: 1.04, y: -4 }}
-              className="p-6 bg-slate-950/80 rounded-2xl border border-purple-500/30 hover:border-purple-400/60 transition-all text-center shadow-xl"
+              className="p-6 bg-slate-950/80 rounded-2xl border border-purple-500/30 hover:border-purple-400/60 transition-all duration-300 text-center shadow-xl hover:-translate-y-1"
             >
               <div className="font-heading text-3xl md:text-4xl font-black text-white mb-1">
                 {stat.number}
               </div>
               <div className="text-sm font-bold text-slate-200">{stat.label}</div>
               <div className="text-xs text-purple-300/80 font-medium mt-0.5">{stat.detail}</div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

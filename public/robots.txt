@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://abhishekjena.in/sitemap.xml
+
+# Prevent crawling of private/build assets
+Disallow: /_next/
+Disallow: /api/

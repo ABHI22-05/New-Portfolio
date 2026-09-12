@@ -50,16 +50,17 @@ export default function Experience() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".exp-card",
-        { y: 40, opacity: 0 },
+        { y: 28, opacity: 0, filter: "blur(3px)" },
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.15,
+          filter: "blur(0px)",
+          duration: 0.75,
+          stagger: 0.1,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top 78%",
           },
         }
       )
@@ -238,34 +239,19 @@ export default function Experience() {
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
-          >
+          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <Briefcase className="w-3.5 h-3.5" />
             <span>Proven Track Record</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
-          >
+          <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
             Work Experience & Production Impact
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-slate-200 max-w-2xl mx-auto"
-          >
+          <p className="text-lg text-slate-200 max-w-2xl mx-auto">
             Real-world software engineering with a focus on database optimization, JVM performance tuning,
             microservices resilience, and zero-downtime scaling.
-          </motion.p>
+          </p>
         </div>
 
         {/* Company Selector Tabs */}
@@ -357,10 +343,9 @@ export default function Experience() {
             {activeExperience.achievements.map((item, index) => {
               const IconComponent = item.icon
               return (
-                <motion.div
+                <div
                   key={index}
-                  whileHover={{ y: -3 }}
-                  className="p-5 rounded-2xl bg-slate-900/80 border border-white/15 hover:border-purple-400/50 transition-all duration-300 flex flex-col justify-between shadow-md"
+                  className="p-5 rounded-2xl bg-slate-900/80 border border-white/15 hover:border-purple-400/50 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between shadow-md"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-3 mb-2.5">
@@ -393,7 +378,7 @@ export default function Experience() {
                       </span>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               )
             })}
           </div>

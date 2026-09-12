@@ -35,16 +35,17 @@ export default function Skills() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".skill-card",
-        { y: 30, opacity: 0 },
+        { y: 24, opacity: 0, filter: "blur(3px)" },
         {
           y: 0,
           opacity: 1,
-          duration: 0.6,
-          stagger: 0.1,
+          filter: "blur(0px)",
+          duration: 0.65,
+          stagger: 0.08,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top 78%",
           },
         }
       )
@@ -218,23 +219,14 @@ export default function Skills() {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-14">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
-          >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Full-Stack & Architecture</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
-          >
+          <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
             Technical Skills & Tech Stack
-          </motion.h2>
+          </h2>
 
           <p className="text-lg text-slate-200 max-w-2xl mx-auto mb-8">
             Categorized technical stack matching enterprise production standards across backend services, distributed systems, and modern web applications.
@@ -278,11 +270,9 @@ export default function Skills() {
           {filteredCategories.map((group, groupIdx) => {
             const Icon = group.icon
             return (
-              <motion.div
+              <div
                 key={group.title}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className={`skill-card p-6 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/15 hover:border-purple-400/50 transition-all flex flex-col justify-between shadow-xl`}
+                className={`skill-card p-6 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/15 hover:border-purple-400/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between shadow-xl`}
               >
                 <div>
                   <div className="flex items-center gap-3 mb-2.5">
@@ -306,22 +296,22 @@ export default function Skills() {
                         skill.toLowerCase().includes(searchQuery.toLowerCase())
 
                       return (
-                        <motion.span
-                          key={skill}
-                          whileHover={{ scale: 1.05 }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                            isHighlighted
-                              ? "bg-purple-600 text-white border-purple-300 shadow-md shadow-purple-500/40"
-                              : "bg-slate-900/90 border-white/15 text-slate-100 hover:border-purple-400/60 hover:text-white"
-                          }`}
-                        >
+                  <motion.span
+                    key={skill}
+                    whileHover={{ scale: 1.04 }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 ${
+                      isHighlighted
+                        ? "bg-purple-600 text-white border-purple-300 shadow-md shadow-purple-500/40"
+                        : "bg-slate-900/90 border-white/15 text-slate-100 hover:border-purple-400/60 hover:text-white"
+                    }`}
+                  >
                           {skill}
-                        </motion.span>
+                  </motion.span>
                       )
                     })}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )
           })}
         </div>

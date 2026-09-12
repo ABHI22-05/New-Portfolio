@@ -33,16 +33,17 @@ export default function Contact() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".contact-element",
-        { y: 40, opacity: 0 },
+        { y: 28, opacity: 0, filter: "blur(3px)" },
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.15,
+          filter: "blur(0px)",
+          duration: 0.75,
+          stagger: 0.12,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top 78%",
           },
         }
       )
@@ -118,23 +119,14 @@ export default function Contact() {
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
-          >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Get In Touch</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
-          >
+          <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
             Let's Build Something Exceptional
-          </motion.h2>
+          </h2>
 
           <p className="text-lg text-slate-200 max-w-2xl mx-auto">
             Open to senior engineering roles, microservices architecture discussions, and exciting full-stack opportunities.

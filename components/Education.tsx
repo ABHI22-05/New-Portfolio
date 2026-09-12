@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { motion } from "framer-motion"
 import { gsap } from "gsap"
 import { GraduationCap, Award, BookOpen, Calendar, MapPin, CheckCircle2 } from "lucide-react"
 
@@ -12,16 +11,17 @@ export default function Education() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".edu-card",
-        { y: 40, opacity: 0 },
+        { y: 28, opacity: 0, filter: "blur(3px)" },
         {
           y: 0,
           opacity: 1,
+          filter: "blur(0px)",
           duration: 0.8,
-          stagger: 0.15,
+          stagger: 0.12,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top 78%",
           },
         }
       )
@@ -35,23 +35,14 @@ export default function Education() {
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4"
-          >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
             <GraduationCap className="w-3.5 h-3.5" />
             <span>Academic Background</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4"
-          >
+          <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
             Education & Foundation
-          </motion.h2>
+          </h2>
 
           <p className="text-lg text-slate-200 max-w-xl mx-auto">
             Formal postgraduate education in computer science, software engineering, and distributed computation.
@@ -59,9 +50,8 @@ export default function Education() {
         </div>
 
         {/* Education Highlight Card */}
-        <motion.div
-          whileHover={{ y: -4 }}
-          className="edu-card relative bg-slate-950/85 backdrop-blur-xl rounded-3xl border border-purple-500/40 p-8 md:p-10 shadow-2xl overflow-hidden"
+        <div
+          className="edu-card relative bg-slate-950/85 backdrop-blur-xl rounded-3xl border border-purple-500/40 hover:border-purple-400/60 hover:-translate-y-1 p-8 md:p-10 shadow-2xl overflow-hidden transition-all duration-300"
         >
           {/* Subtle background glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -132,7 +122,7 @@ export default function Education() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
